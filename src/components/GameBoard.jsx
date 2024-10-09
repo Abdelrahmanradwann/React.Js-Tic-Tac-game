@@ -6,16 +6,17 @@ const initialGameBoard = [
     [null, null, null]
 ]
 
-export default function GameBoard() {
+export default function GameBoard({symbol, changeTurn}) {
     const [gameBoard, setGameBoard] = useState(initialGameBoard)
 
     function handleSelectSquare(rowIndex, colIndex) {
         // declare a new object instead of modifying the prev one, to prevent bugs as react may not update it cuz of same ref
         setGameBoard(prevGameBoard => {
             const newGameBoard = [...prevGameBoard.map(row => [...row])]
-            newGameBoard[rowIndex][colIndex] = "X"
+            newGameBoard[rowIndex][colIndex] = symbol
             return newGameBoard
         })
+        changeTurn()
     }
     
     return (
