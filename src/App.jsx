@@ -1,18 +1,30 @@
 import Player from "./components/Player.jsx"
 import GameBoard from "./components/GameBoard"
 import { useState } from "react"
+import Log from "./components/Log"
+
+
+function helper(turn) {
+  if (!turn.length) return 'X';
+
+  if(turn[0].player=='X')return 'O';
+  else return 'X';
+}
 
 function App() {
-  const [activePlayer, setActivePlayer] = useState("X")
   const [gameTurn, setGameTurn] = useState([])
 
-  
-  function handleTurn(rowIndex,colIndex) {
-    setActivePlayer(prevTurn => prevTurn === "X" ? "O" : "X")
+  let activePlayer = 'X';
+  activePlayer = helper(gameTurn)
+
+  function handleTurn(rowIndex, colIndex) {
+    if (gameTurn.find(turn => turn.square.rowIndex === rowIndex && turn.square.colIndex === colIndex)) {
+      return;
+    }
     setGameTurn(prev => {
       let currentTurn = 'X';
       if(prev.length) {
-        currentTurn = prev[0].player === 'X' ? 'O' : 'X'
+        currentTurn = helper(prev)
       }
       const updatedTurn = [
         {square: {rowIndex,colIndex}, player:currentTurn},
@@ -31,7 +43,7 @@ function App() {
         </ol>
         <GameBoard changeTurn = {handleTurn} turns = {gameTurn} />
       </div>
-      LOG
+      <Log turn={gameTurn} />
     </main>
     
 
