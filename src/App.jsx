@@ -3,20 +3,33 @@ import GameBoard from "./components/GameBoard"
 import { useState } from "react"
 
 function App() {
-  const [playerTurn, setPlayerTurn] = useState("X")
+  const [activePlayer, setActivePlayer] = useState("X")
+  const [gameTurn, setGameTurn] = useState([])
+
   
-  function handleTurn() {
-    setPlayerTurn(prevTurn => prevTurn === "X" ? "O" : "X")
+  function handleTurn(rowIndex,colIndex) {
+    setActivePlayer(prevTurn => prevTurn === "X" ? "O" : "X")
+    setGameTurn(prev => {
+      let currentTurn = 'X';
+      if(prev.length) {
+        currentTurn = prev[0].player === 'X' ? 'O' : 'X'
+      }
+      const updatedTurn = [
+        {square: {rowIndex,colIndex}, player:currentTurn},
+        ...prev
+      ]
+      return updatedTurn
+    })
   }
 
   return (
     <main>
       <div id="game-container">
-        <ol id = "players">
-          <Player name="player1" symbol={ playerTurn } />
-          <Player name="player2" symbol={ playerTurn } />
+        <ol id = "players" className="highlight-player">
+          <Player name="player1" symbol='X' isActive={ activePlayer === 'X'} />
+          <Player name="player2" symbol='O' isActive={ activePlayer === 'O' } />
         </ol>
-        <GameBoard symbol={ playerTurn } changeTurn = {handleTurn} />
+        <GameBoard changeTurn = {handleTurn} turns = {gameTurn} />
       </div>
       LOG
     </main>
