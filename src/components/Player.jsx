@@ -1,12 +1,16 @@
 import { useState } from "react"
-export default function Player({name,symbol, isActive}) {
+export default function Player({name,symbol, isActive, handlePlayers}) {
     const [isEditing, setIsEditing] = useState(false)
     const [PlayerName, setPlayerName] = useState(name)
     function handleEditClick(){
         // setIsEditing(!isEditing)
         // This is better than the first as it guarantees that it will get the latest value of isEditing
         setIsEditing(editing => !editing)
+        if (isEditing) {   // why when true?
+            handlePlayers(symbol, PlayerName)
+        }
     }
+    
     function handleNameChange(event) {
         setPlayerName(event.target.value)
     }
